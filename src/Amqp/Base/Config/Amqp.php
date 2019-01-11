@@ -3,9 +3,8 @@ namespace Amqp\Base\Config;
 
 use Amqp\Base\Config\Interfaces\NamedConfigInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Amqp implements ConfigurationInterface, NamedConfigInterface
+class Amqp implements NamedConfigInterface
 {
     /**
      * {@inheritdoc}

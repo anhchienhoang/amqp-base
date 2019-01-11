@@ -11,23 +11,27 @@ class YamlFileLoader extends FileLoader
      * Loads a resource.
      *
      * @param mixed       $resource The resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param string|null $type The resource type or null if unknown
      *
      * @return array
      * @throws \Exception If something went wrong
      */
-    public function load($resource, $type = null)
+    public function load($resource, $type = null): array
     {
         $config = $this->parseYaml($resource);
-        if (isset($config['imports']) && is_array($config['imports'])) {
-            foreach ($config['imports'] as $import) {
-                $config = array_merge_recursive($config, (array) $this->import($import['resource'], null, true, $resource));
-            }
+        $parsedConfigs = [$config];
+        $resourceDir = \dirname($resource);
 
-            unset($config['imports']);
+        if (isset($config['imports']) && \is_array($config['imports'])) {
+            foreach ($config['imports'] as $import) {
+                $parsedConfigs[] = (array)$this->import($resourceDir.'/'.$import['resource']);
+            }
         }
 
-        return $config;
+        $configs = array_merge_recursive(...$parsedConfigs);
+        unset($configs['imports']);
+
+        return $configs;
     }
 
     /**
@@ -37,7 +41,7 @@ class YamlFileLoader extends FileLoader
      *
      * @return array
      */
-    protected function parseYaml($resource)
+    protected function parseYaml($resource): array
     {
         return Yaml::parse($this->loadResourceData($resource));
     }
@@ -49,7 +53,7 @@ class YamlFileLoader extends FileLoader
      *
      * @return string
      */
-    protected function loadResourceData($resource)
+    protected function loadResourceData($resource): string
     {
         return file_get_contents($resource);
     }
@@ -58,11 +62,11 @@ class YamlFileLoader extends FileLoader
      * Returns whether this class supports the given resource.
      *
      * @param mixed       $resource A resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param string|null $type The resource type or null if unknown
      *
      * @return bool True if this class supports the given resource, false otherwise
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
         return preg_match('/\.ya?ml$/i', $resource);
     }

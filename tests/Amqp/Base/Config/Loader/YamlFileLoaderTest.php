@@ -2,7 +2,10 @@
 
 namespace Test\Amqp\Base\Config\Loader;
 
-class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
+use Amqp\Base\Config\Loader\YamlFileLoader;
+use PHPUnit\Framework\TestCase;
+
+class YamlFileLoaderTest extends TestCase
 {
     /**
      * Test configuration load with imports
@@ -10,14 +13,14 @@ class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadWithImports()
     {
 
-        $mockLoader = $this->getMockBuilder('Amqp\Base\Config\Loader\YamlFileLoader')
+        $mockLoader = $this->getMockBuilder(YamlFileLoader::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'loadResourceData'
             ])->getMock();
 
-        $mockLoader->expects($this->any())->method('loadResourceData')->willReturnCallback(function ($filename) {
-            if ('test.yml' === $filename) {
+        $mockLoader->method('loadResourceData')->willReturnCallback(function ($filename) {
+            if ('/cache/test.yml' === $filename) {
                 return <<<YAML
 imports:
     - { resource: "foo.yml" }
@@ -26,7 +29,7 @@ test:
 YAML;
             }
 
-            if ('foo.yml' === $filename) {
+            if ('/cache/foo.yml' === $filename) {
                 return <<<YAML
 foo_string: "foo_string"
 foo_arr:
@@ -43,7 +46,7 @@ YAML;
             'test' => 1,
         );
 
-        $config = $mockLoader->load('test.yml');
+        $config = $mockLoader->load('/cache/test.yml');
         $this->assertEquals($config, $expected);
     }
 }

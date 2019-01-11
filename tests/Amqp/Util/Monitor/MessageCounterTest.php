@@ -3,8 +3,9 @@
 namespace Test\Amqp\Util\Monitor;
 
 use \Amqp\Util\Monitor\MessageCounter;
+use PHPUnit\Framework\TestCase;
 
-class MessageCounterTest extends \PHPUnit_Framework_TestCase
+class MessageCounterTest extends TestCase
 {
     /** @var \Amqp\Util\Listener\Simple */
     protected $listener;

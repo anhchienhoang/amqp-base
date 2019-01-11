@@ -1,8 +1,6 @@
 <?php
 namespace Amqp\Base\Config\Interfaces;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-
 interface Processor
 {
     /**

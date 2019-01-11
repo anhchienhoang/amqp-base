@@ -1,0 +1,5 @@
+foo_string: "foo_string"
+foo_arr:
+    - 1
+    - 2
+    - { name: "test" }

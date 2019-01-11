@@ -8,8 +8,8 @@
  */
 namespace Amqp\Base\Builder;
 
-use Amqp\Base\Config\Processor;
-use \AMQPConnection,
+use Amqp\Base\Config\Interfaces\Processor,
+    \AMQPConnection,
     \AMQPChannel,
     \AMQPQueue,
     \AMQPExchange;
